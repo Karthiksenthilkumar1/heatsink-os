@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../models/core_data.dart';
-import '../../services/mock_thermal_service.dart';
+import '../../services/thermal_service.dart';
+import '../../services/api_thermal_service.dart';
+import '../../services/mock_thermal_service.dart'; // Keep for fallback if needed
 import '../widgets/thermal_card.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -11,7 +13,8 @@ class DashboardScreen extends StatefulWidget {
 }
 
 class _DashboardScreenState extends State<DashboardScreen> {
-  final ThermalService _thermalService = MockThermalService();
+  // Switch to ApiThermalService for real data
+  final ThermalService _thermalService = ApiThermalService();
   late Stream<List<CoreData>> _coreDataStream;
 
   @override

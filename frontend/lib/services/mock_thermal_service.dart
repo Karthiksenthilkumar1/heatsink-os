@@ -1,11 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import '../models/core_data.dart';
-
-abstract class ThermalService {
-  Stream<List<CoreData>> get coreDataStream;
-  void dispose();
-}
+import 'thermal_service.dart';
 
 class MockThermalService implements ThermalService {
   final _controller = StreamController<List<CoreData>>.broadcast();
