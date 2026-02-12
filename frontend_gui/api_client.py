@@ -30,3 +30,6 @@ class HeatSinkAPIClient:
 
     def get_decision(self):
         return self._get("/decision")
+
+    def get_predictions(self):
+        return self._get("/predictions")

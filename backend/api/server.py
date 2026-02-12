@@ -10,6 +10,7 @@ state = {
     "thermal_data": {},
     "load_report": {},
     "trend_report": {},
+    "predictions": {},
     "decision": {},
     "status": "Initializing"
 }

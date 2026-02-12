@@ -63,6 +63,7 @@ class HeatSinkOrchestrator:
                 state["thermal_data"] = thermal_data
                 state["load_report"] = load_report
                 state["trend_report"] = trend_report
+                state["predictions"] = predictions
                 state["decision"] = decision
                 
             except Exception as e:

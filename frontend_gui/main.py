@@ -84,8 +84,13 @@ class HeatSinkWindow(QMainWindow):
         left_layout.addWidget(cores_scroll)
         dash_layout.addLayout(left_layout, 2)
         
-        # Right Dashboard: Insights
-        right_layout = QVBoxLayout()
+        # Right Dashboard: Insights (In its own scroll area to prevent cut-off)
+        right_scroll = QScrollArea()
+        right_scroll.setWidgetResizable(True)
+        right_scroll.setFrameShape(QFrame.NoFrame)
+        right_container = QWidget()
+        right_container.setObjectName("CentralWidget")
+        right_layout = QVBoxLayout(right_container)
         right_layout.setSpacing(25)
         
         agg_panel = QFrame()
@@ -99,36 +104,46 @@ class HeatSinkWindow(QMainWindow):
         right_layout.addWidget(agg_panel)
         
         self.thermal_graph = ThermalGraph()
-        right_layout.addWidget(self.thermal_graph, 1)
+        right_layout.addWidget(self.thermal_graph)
         
         self.decision_panel = DecisionPanel()
         right_layout.addWidget(self.decision_panel)
-        dash_layout.addLayout(right_layout, 1)
+        right_layout.addStretch()
+        
+        right_scroll.setWidget(right_container)
+        dash_layout.addWidget(right_scroll, 1)
         
         self.stack.addWidget(dash_widget) # Index 0: dash
         
         # --- VIEW: Performance ---
         self.perf_view = PerformanceView(self.config_manager)
-        self.stack.addWidget(self.perf_view) # Index 1: perf
+        self.stack.addWidget(self._wrap_in_scroll(self.perf_view)) # Index 1
         
         # --- VIEW: History ---
         self.history_view = HistoryView(self.config_manager)
-        self.stack.addWidget(self.history_view) # Index 2: hist
+        self.stack.addWidget(self.history_view) # Index 2 (Already has internal scroll)
         
         # --- VIEW: Settings ---
         self.settings_panel = SettingsPanel(self.config_manager)
-        self.stack.addWidget(self.settings_panel) # Index 3: sett
+        self.stack.addWidget(self._wrap_in_scroll(self.settings_panel)) # Index 3
         
         # --- VIEW: Core Detail ---
         self.detail_view = CoreDetailView()
         self.detail_view.back_requested.connect(lambda: self._switch_view("dash"))
-        self.stack.addWidget(self.detail_view) # Index 4 (Dynamic)
+        self.stack.addWidget(self._wrap_in_scroll(self.detail_view)) # Index 4
         
         # Overlays
         self.hover_overlay = HoverOverlay(self)
         
         root_layout.addLayout(self.stack)
         self.setStyleSheet(get_application_styles())
+
+    def _wrap_in_scroll(self, widget):
+        scroll = QScrollArea()
+        scroll.setWidgetResizable(True)
+        scroll.setFrameShape(QFrame.NoFrame)
+        scroll.setWidget(widget)
+        return scroll
 
     def _create_metric(self, label, value):
         layout = QVBoxLayout()
@@ -176,6 +191,8 @@ class HeatSinkWindow(QMainWindow):
         # Update Core Tiles
         temps = self.api_client.get_temps()
         load = self.api_client.get_load()
+        trend_data = self.api_client.get_trend()
+        predictions = self.api_client.get_predictions()
         
         if temps and 'cores' in temps:
             core_data = temps['cores']
@@ -207,7 +224,15 @@ class HeatSinkWindow(QMainWindow):
                 
                 # Update detail view if active
                 if self.stack.currentIndex() == 4 and self.detail_view.core_id == cid_int:
-                    self.detail_view.update_data(cur_temp, cload)
+                    # Get top processes for this core if available in load report
+                    top_procs = []
+                    if load and cid in load:
+                        top_procs = load[cid].get('top_processes', [])
+                        
+                    # Get trend and prediction
+                    ctrend = trend_data.get(cid) if trend_data else None
+                    cpred = predictions.get(cid) if predictions else None
+                    self.detail_view.update_data(cur_temp, cload, top_procs, trend=ctrend, prediction=cpred)
         
         self.header.update_status(max_t, is_running)
         
@@ -258,44 +283,34 @@ class HeatSinkWindow(QMainWindow):
         if tile:
             temp_txt = tile.temp_label.text().replace("°", "")
             temp = float(temp_txt) if temp_txt != "●" else 0.0
-            load_txt = tile.load_label.text()
-            # Map load text to approximate percentage for tooltip
-            load_map = {"IDLE": 2, "LIGHT": 15, "ACTIVE": 45, "HEAVY": 85}
-            load_val = load_map.get(load_txt, 0)
+            status_txt = tile.status_label.text()
+            # Map status text to approximate percentage for tooltip
+            status_map = {"NORMAL (normal)": 15, "WARNING (warm)": 65, "ALERT (hot)": 95}
+            load_val = status_map.get(status_txt, 0)
             self.hover_overlay.update_data(core_id, temp, load_val, tile.history)
             self.hover_overlay.show_at(pos)
 
     def _show_core_detail(self, core_id):
-        self.detail_view.set_core(core_id)
+        self.detail_view.set_core(core_id, self.config_manager.get_history())
         # Update it immediately
         tile = self.core_tiles.get(core_id)
         if tile:
             temp_txt = tile.temp_label.text().replace("°", "")
             temp = float(temp_txt) if temp_txt != "●" else 0.0
-            # Map load text to approximate percentage
-            load_map = {"IDLE": 2, "LIGHT": 15, "ACTIVE": 45, "HEAVY": 85}
-            load_val = load_map.get(tile.load_label.text(), 0)
+            status_txt = tile.status_label.text()
+            # Map status text to approximate percentage
+            status_map = {"NORMAL (normal)": 15, "WARNING (warm)": 65, "ALERT (hot)": 95}
+            load_val = status_map.get(status_txt, 0)
             self.detail_view.update_data(temp, load_val)
             
         self.stack.setCurrentIndex(4) # Detail View index
 
     def _update_tile_with_settings(self, tile, temp, load, settings):
         # Override standard update with customizable settings
-        thresholds = settings["thresholds"]
         tile.temp_label.setText(f"{int(temp)}°" if settings["show_numeric"] else "●")
         
+        # Logic for colors and labels is now internal to CoreZone for robust real-time update
         tile.update_data(temp, load)
-        
-        status = "safe"
-        if temp >= thresholds["hot"]:
-            status = "hot"
-        elif temp >= thresholds["warm"]:
-            status = "warm"
-        
-        if tile.property("status") != status:
-            tile.setProperty("status", status)
-            tile.style().unpolish(tile)
-            tile.style().polish(tile)
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

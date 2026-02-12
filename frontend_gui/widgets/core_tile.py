@@ -22,22 +22,36 @@ class CoreZone(QFrame):
         self.temp_label.setObjectName("MetricValue")
         layout.addWidget(self.temp_label, alignment=Qt.AlignCenter)
         
-        self.load_label = QLabel("IDLE")
-        self.load_label.setObjectName("Caption")
-        layout.addWidget(self.load_label, alignment=Qt.AlignCenter)
+        self.status_label = QLabel("NORMAL")
+        self.status_label.setObjectName("Caption")
+        layout.addWidget(self.status_label, alignment=Qt.AlignCenter)
 
     def update_data(self, temp, load):
         self.temp_label.setText(f"{int(temp)}°")
         
-        # Human-readable load
-        if load < 5:
-            self.load_label.setText("IDLE")
-        elif load < 30:
-            self.load_label.setText("LIGHT")
-        elif load < 70:
-            self.load_label.setText("ACTIVE")
+        # Exact Threshold Logic:
+        # >67 -> ALERT (hot)
+        # 63–67 -> WARNING (warm)
+        # <63 -> NORMAL (normal)
+        
+        status = "safe"
+        if temp > 67.0:
+            self.status_label.setText("ALERT (hot)")
+            self.status_label.setStyleSheet("color: #FF3131; font-weight: bold;")
+            status = "hot"
+        elif temp >= 63.0:
+            self.status_label.setText("WARNING (warm)")
+            self.status_label.setStyleSheet("color: #FFD700; font-weight: bold;")
+            status = "warm"
         else:
-            self.load_label.setText("HEAVY")
+            self.status_label.setText("NORMAL (normal)")
+            self.status_label.setStyleSheet("color: #00FFC8;")
+            status = "safe"
+            
+        if self.property("status") != status:
+            self.setProperty("status", status)
+            self.style().unpolish(self)
+            self.style().polish(self)
             
         # Per-core history for hover sparkline
         if not hasattr(self, 'history'): self.history = []
