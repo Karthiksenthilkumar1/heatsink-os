@@ -58,12 +58,14 @@ class DecisionEngine:
             return {"action": "NO_ACTION", "reason": f"No heavy processes found on hot core {from_core}"}
 
         self.last_migration_time = now
+        top_proc = top_pids[0]
         return {
             "action": "MIGRATE",
             "from_core": from_core,
             "to_core": to_core,
-            "pid": top_pids[0],
-            "reason": f"Core {from_core} is hot ({cores[from_core]['temperature']}C), moving workload to Core {to_core}"
+            "pid": top_proc["pid"],
+            "process_name": top_proc["name"],
+            "reason": f"Core {from_core} is hot ({cores[from_core]['temperature']}C), moving {top_proc['name']} to Core {to_core}"
         }
 
 if __name__ == "__main__":

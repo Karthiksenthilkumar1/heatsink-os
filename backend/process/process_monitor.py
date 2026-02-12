@@ -44,10 +44,13 @@ class ProcessMonitor:
         top_procs = self.get_top_processes()
         
         report = {}
+        # Format top processes as a list of dicts with name and pid
+        process_metadata = [{"pid": p['pid'], "name": p['name']} for p in top_procs]
+        
         for i, load in enumerate(core_loads):
             report[i] = {
                 "load_percent": load,
-                "top_processes": [p['pid'] for p in top_procs] # Best effort mapping: showing global heavies
+                "top_processes": process_metadata # Showing global heavies with names
             }
         
         return report
