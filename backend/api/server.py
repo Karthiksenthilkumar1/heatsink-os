@@ -8,6 +8,7 @@ app = FastAPI(title="HeatSink-OS API")
 # These will be populated by the main orchestrator
 state = {
     "thermal_data": {},
+    "load_report": {},
     "trend_report": {},
     "decision": {},
     "status": "Initializing"
@@ -16,6 +17,10 @@ state = {
 @app.get("/temps")
 def get_temps():
     return state["thermal_data"]
+
+@app.get("/load")
+def get_load():
+    return state["load_report"]
 
 @app.get("/trend")
 def get_trend():

@@ -26,6 +26,8 @@ class ProcessMonitor:
                 # Filter out system-critical processes and Idle process (PID 0)
                 if proc.info['pid'] <= 4:
                     continue
+                if proc.info['cpu_percent'] is None:
+                    continue
                 processes.append(proc.info)
             except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
                 pass

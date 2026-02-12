@@ -61,11 +61,13 @@ class HeatSinkOrchestrator:
                 
                 # Update global state for API
                 state["thermal_data"] = thermal_data
+                state["load_report"] = load_report
                 state["trend_report"] = trend_report
                 state["decision"] = decision
                 
             except Exception as e:
-                logger.error(f"Error in control loop: {e}")
+                import traceback
+                logger.error(f"Error in control loop: {e}\n{traceback.format_exc()}")
                 state["status"] = f"Error: {e}"
             
             time.sleep(0.5)
