@@ -1,0 +1,137 @@
+[
+    {
+        "timestamp": "2026-02-12 23:42:16",
+        "summary": "Core 0 is hot (68.080331089494C), moving msedgewebview2.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 0,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:42:14",
+        "summary": "Core 4 is hot (68.6269193857687C), moving msedgewebview2.exe to Core 1",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 4,
+        "to_core": 1
+    },
+    {
+        "timestamp": "2026-02-12 23:42:12",
+        "summary": "Core 2 is hot (68.93284560866505C), moving msedgewebview2.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 2,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:42:09",
+        "summary": "Core 0 is hot (69.01111061439201C), moving msedgewebview2.exe to Core 1",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 0,
+        "to_core": 1
+    },
+    {
+        "timestamp": "2026-02-12 23:42:07",
+        "summary": "Core 2 is hot (66.1923965577881C), moving msedgewebview2.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 2,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:42:04",
+        "summary": "Core 5 is hot (67.9043457547903C), moving Antigravity.exe to Core 3",
+        "action": "MIGRATE",
+        "pid": 6992,
+        "process_name": "Antigravity.exe",
+        "from_core": 5,
+        "to_core": 3
+    },
+    {
+        "timestamp": "2026-02-12 23:42:01",
+        "summary": "Core 7 is hot (68.13788831371149C), moving Antigravity.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 6992,
+        "process_name": "Antigravity.exe",
+        "from_core": 7,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:41:59",
+        "summary": "Core 7 is hot (66.83381506023846C), moving Antigravity.exe to Core 3",
+        "action": "MIGRATE",
+        "pid": 6992,
+        "process_name": "Antigravity.exe",
+        "from_core": 7,
+        "to_core": 3
+    },
+    {
+        "timestamp": "2026-02-12 23:41:57",
+        "summary": "Core 20 is hot (67.21307852299691C), moving msedgewebview2.exe to Core 1",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 20,
+        "to_core": 1
+    },
+    {
+        "timestamp": "2026-02-12 23:41:54",
+        "summary": "Core 1 is hot (67.66015091594453C), moving msedgewebview2.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 1,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:41:52",
+        "summary": "Core 13 is hot (69.58019651652813C), moving msedgewebview2.exe to Core 1",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 13,
+        "to_core": 1
+    },
+    {
+        "timestamp": "2026-02-12 23:41:50",
+        "summary": "Core 1 is hot (68.59676088987106C), moving msedgewebview2.exe to Core 3",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 1,
+        "to_core": 3
+    },
+    {
+        "timestamp": "2026-02-12 23:41:47",
+        "summary": "Core 0 is hot (68.83030066339833C), moving Antigravity.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 6992,
+        "process_name": "Antigravity.exe",
+        "from_core": 0,
+        "to_core": 2
+    },
+    {
+        "timestamp": "2026-02-12 23:41:45",
+        "summary": "Core 7 is hot (68.42372150717631C), moving msedgewebview2.exe to Core 1",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 7,
+        "to_core": 1
+    },
+    {
+        "timestamp": "2026-02-12 23:41:43",
+        "summary": "Core 6 is hot (65.92917679079567C), moving msedgewebview2.exe to Core 2",
+        "action": "MIGRATE",
+        "pid": 22388,
+        "process_name": "msedgewebview2.exe",
+        "from_core": 6,
+        "to_core": 2
+    }
+]
