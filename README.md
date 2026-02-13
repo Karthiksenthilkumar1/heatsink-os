@@ -39,12 +39,12 @@ Ensure you have Python 3.9+ installed.
 ```bash
 # Recommended: Create a virtual environment
 python -m venv .venv
-source .venv/bin/activate  # macOS/Linux
+source .venv/bin/activate  # Windows (Adjust for your shell)
 ```
 
 ### 2. Installation
 ```bash
-pip install -r backend/requirements-mac.txt  # Or dependencies listed in source
+pip install -r requirements.txt  # Ensure dependencies are met
 ```
 
 ### 3. Running the System
@@ -72,7 +72,6 @@ python frontend_gui/main.py
 
 - [x] Initial core-migration logic
 - [x] PySide6 Dashboard integration
-- [x] macOS Simulation support
 - [ ] Integration with hardware-specific FAN control
 - [ ] Machine Learning based thermal prediction (Model v2)
 
