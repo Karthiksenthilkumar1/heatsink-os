@@ -1,0 +1,13 @@
+{
+    "thresholds": {
+        "safe": 70.0,
+        "warm": 80.0,
+        "hot": 90.0
+    },
+    "refresh_rate": 1000,
+    "show_numeric": true,
+    "show_predictions": true,
+    "enable_notifications": true,
+    "enable_logging": true,
+    "export_path": "C:/Users/Tarun/HeatSink-OS/heatsink-os/frontend_gui"
+}
